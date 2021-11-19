@@ -5,15 +5,9 @@ import static java.util.stream.Collectors.toList;
 import delivery.app.user.AuthenticationServiceApi;
 import delivery.app.user.dto.Authority;
 import delivery.app.user.dto.UsernameAndPassword;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
-import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.reactive.function.BodyInserter;
 import org.springframework.web.reactive.function.BodyInserters;
-import org.springframework.web.reactive.function.client.ExchangeFilterFunctions;
 import org.springframework.web.reactive.function.client.WebClient;
 
 @Service
