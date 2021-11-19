@@ -5,7 +5,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
-    implementation 'org.apache.httpcomponents:httpclient'
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
 
     implementation project(':commons')
     implementation project(':user-service-idl')

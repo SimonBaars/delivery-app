@@ -30,7 +30,7 @@ import org.springframework.web.client.RestTemplate;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @WireMockTest(httpPort = 8083)
-public class ServiceIntegrationTest {
+class ServiceIntegrationTest {
 
   @LocalServerPort
   int port;
