@@ -9,10 +9,10 @@ import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
 import org.springframework.web.reactive.function.client.ExchangeFunction;
 import reactor.core.publisher.Mono;
 
-public class Interceptor implements ExchangeFilterFunction {
+public class AuthenticationInterceptor implements ExchangeFilterFunction {
   @Override
   public Mono<ClientResponse> filter(ClientRequest request, ExchangeFunction next) {
-    addJWTBearerToken(request.headers(), SecurityContextHolder.getContext().getAuthentication());
-    return next.exchange(request);
+    ClientRequest.Builder newRequest = ClientRequest.from(request).headers(hs -> addJWTBearerToken(hs, SecurityContextHolder.getContext().getAuthentication()));
+    return next.exchange(newRequest.build());
   }
 }

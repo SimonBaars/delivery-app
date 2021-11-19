@@ -1,6 +1,6 @@
 package delivery.app.common;
 
-import delivery.app.common.security.web.client.Interceptor;
+import delivery.app.common.security.web.client.AuthenticationInterceptor;
 import delivery.app.common.security.web.client.JWTHeadersClientRequestCustomizer;
 import org.springframework.boot.web.reactive.function.client.WebClientCustomizer;
 import org.springframework.context.annotation.Bean;
@@ -17,6 +17,6 @@ public class BaseConfiguration {
 
   @Bean
   public WebClientCustomizer clientInternalJWTRequestCustomizerWebClient() {
-    return b -> WebClient.builder().filter(new Interceptor());
+    return b -> WebClient.builder().filter(new AuthenticationInterceptor());
   }
 }

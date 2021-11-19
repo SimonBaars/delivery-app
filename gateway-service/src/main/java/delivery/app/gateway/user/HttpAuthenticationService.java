@@ -15,8 +15,8 @@ class HttpAuthenticationService implements AuthenticationServiceApi {
 
   final WebClient webClient;
 
-  HttpAuthenticationService() {
-    this.webClient = WebClient.builder().baseUrl("http://localhost:8081").build();
+  HttpAuthenticationService(WebClient.Builder webClientBuilder) {
+    this.webClient = webClientBuilder.baseUrl("http://localhost:8081").build();
   }
 
   @Override
