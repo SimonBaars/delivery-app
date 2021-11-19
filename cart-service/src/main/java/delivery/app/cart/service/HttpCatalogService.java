@@ -1,42 +1,48 @@
 package delivery.app.cart.service;
 
+import static java.util.stream.Collectors.toList;
+
 import delivery.app.user.CatalogServiceApi;
 import delivery.app.user.dto.Product;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Function;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 @Service
 public class HttpCatalogService implements CatalogServiceApi {
 
-  final RestTemplate restTemplate;
+  final WebClient webClient;
 
-  public HttpCatalogService(RestTemplateBuilder restTemplateBuilder) {
-    this.restTemplate = restTemplateBuilder.rootUri("http://localhost:8083").build();
+  public HttpCatalogService(WebClient.Builder webClientBuilder) {
+    this.webClient = WebClient.builder().baseUrl("http://localhost:8083").build();
   }
 
   @Override
   public Product find(String productId) {
-    return restTemplate.getForObject("/api/products/{id}", Product.class, productId);
+    return webClient.get().uri("/api/products/{id}", productId).retrieve().bodyToMono(Product.class).block();
   }
 
   @Override
   public List<Product> findAll() {
-    final Product[] products = restTemplate.getForObject("/api/products", Product[].class);
-    return products != null ? Arrays.asList(products) : Collections.emptyList();
+    return webClient.get().uri("/api/products").retrieve().bodyToFlux(Product.class).collect(toList()).block();
   }
 
   @Override
   public boolean exist(String productId) {
-    final ResponseEntity<Void> responseEntity = restTemplate
-        .exchange("/api/products/{id}", HttpMethod.HEAD, null, Void.class, productId);
-
-    return responseEntity.getStatusCode().is2xxSuccessful();
+    return Boolean.TRUE.equals(webClient
+        .head()
+        .uri("/api/products/{id}")
+        .exchangeToMono(res -> Mono.just(res.statusCode().is2xxSuccessful()).doOnNext(a -> res.releaseBody()))
+        .block());
   }
 
   @Override
