@@ -40,8 +40,11 @@ public class HttpCatalogService implements CatalogServiceApi {
   public boolean exist(String productId) {
     return Boolean.TRUE.equals(webClient
         .head()
-        .uri("/api/products/{id}")
-        .exchangeToMono(res -> Mono.just(res.statusCode().is2xxSuccessful()).doOnNext(a -> res.releaseBody()))
+        .uri("/api/products/{id}", productId)
+        .exchangeToMono(res -> {
+          res.releaseBody();
+          return Mono.just(res.statusCode().is2xxSuccessful());
+        })
         .block());
   }
 
